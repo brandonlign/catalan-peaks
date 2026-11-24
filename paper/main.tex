@@ -1,0 +1,770 @@
+\documentclass[11pt]{amsart}
+\usepackage[margin=1.15in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools,booktabs}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Arg}{\operatorname{Arg}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\pk}{\operatorname{pk}}
+
+\title{Short peaks in Catalan words: real zeros and interlacing}
+\author{Brandon Li}
+\address{Great Neck, New York, USA}
+\email{brandon.li.gn@gmail.com}
+\subjclass[2020]{05A15, 05A16, 26C10}
+\keywords{Catalan words, peaks, real-rooted polynomials, interlacing, Dyck paths}
+
+
+\begin{document}
+\begin{abstract}
+A Catalan word is a word $w_1\cdots w_n$ of nonnegative integers with $w_1=0$
+and $w_{i+1}\le w_i+1$. Alexandersson conjectured that the polynomials
+$C_n(t)$ counting Catalan words of length $n$ by peaks are real-rooted and
+interlace consecutively. The same polynomials count Dyck paths of semilength
+$n$ by occurrences of $UDUU$. We prove the conjecture: every $C_n$ has only
+simple negative zeros, and the zeros of $C_n$ and $C_{n+1}$ strictly
+interlace. For $n\ge 420$ the proof is analytic. A contour integral over four
+branch cuts writes each $C_n$ as an explicit oscillating cosine, and
+consecutive rows share one phase whose increments we bound. For $n\le 420$ an
+exact Sturm-sequence computation completes the proof.
+\end{abstract}
+\maketitle
+
+\section{Introduction}
+
+A \emph{Catalan word} of length $n\ge1$ is a word $w=w_1w_2\cdots w_n$ of
+nonnegative integers with $w_1=0$ and $w_{i+1}\le w_i+1$ for all $i$. There
+are $\frac1{n+1}\binom{2n}{n}$ of them; they are the area sequences of Dyck
+paths. A \emph{peak} of $w$ is an index $1<i<n$ with $w_{i-1}<w_i>w_{i+1}$.
+Since an ascent in a Catalan word has size one, a peak is a factor
+$a(a+1)b$ with $b\le a$; Baril, Harris, Harry, McClinton and
+Ram\'irez~\cite{BHHMR} call these \emph{short peaks}. Let
+\[
+ C_n(t)=\sum_{w}t^{\pk(w)},
+\]
+the sum over Catalan words of length $n$, where $\pk(w)$ is the number of
+peaks, and set $C_0=1$. Table~\ref{tab:rows} lists the first rows. The same
+triangle counts Dyck paths of semilength $n$ by the number of occurrences of
+the factor $UDUU$~\cite{OEIS}.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}rl@{}}
+\toprule
+$n$ & $C_n(t)$\\
+\midrule
+$1,2$ & $1,\ 2$\\
+$3$ & $4+t$\\
+$4$ & $9+5t$\\
+$5$ & $22+19t+t^2$\\
+$6$ & $57+66t+9t^2$\\
+$7$ & $154+221t+53t^2+t^3$\\
+$8$ & $429+729t+258t^2+14t^3$\\
+\bottomrule
+\end{tabular}
+\caption{The polynomials $C_n(t)$ for $n\le 8$.}\label{tab:rows}
+\end{table}
+
+\begin{conjecture}[Alexandersson~\cite{Ale}]\label{conj:alex}
+The polynomials $C_n(t)$ are real-rooted and interlace consecutively.
+\end{conjecture}
+
+Alexandersson reports that the conjecture holds for $n\le 40$. We prove it in
+the following strict form.
+
+\begin{theorem}\label{thm:main}
+For every $n\ge0$ the polynomial $C_n(t)$ has only simple, negative real zeros.
+For every $n\ge1$ the zeros of $C_n$ and $C_{n+1}$ strictly interlace, and the
+largest zero among them belongs to $C_{n+1}$. Explicitly, if $C_n$ has zeros
+$r_1<\dots<r_d$ and $C_{n+1}$ has zeros $s_1<\dots<s_e$, then
+\begin{align*}
+ s_1<r_1<s_2<r_2<\dots<r_d<s_{d+1}&\quad\text{if } e=d+1,\\
+ r_1<s_1<r_2<s_2<\dots<r_d<s_d&\quad\text{if } e=d.
+\end{align*}
+\end{theorem}
+
+The degree of $C_n$ is $\lfloor(n-1)/2\rfloor$ for $n\ge1$
+(Lemma~\ref{lem:basic}), so both cases occur.
+
+\subsection*{Outline of the proof}
+For large $n$ we work with $p_n(a)=C_n(1-a)$, whose generating function
+$G$ is algebraic of degree two with an explicit discriminant
+(Section~\ref{sec:gf}). All zeros of $p_n$ turn out to lie in $a>a_0=27/16$,
+the value at which two branch points of $G$ collide. Section~\ref{sec:param}
+parametrizes $a>a_0$ by an angle $\alpha\in(0,\pi/2)$ so that the four branch
+points become the explicit points $q=e^{i\alpha}$, $\eta$ and their
+conjugates. Cutting the plane along four rays and deforming Cauchy's integral
+gives an exact formula $p_n(a)=K\,|Z_q S_{n+1}|\cos W_{n+1}(\alpha)$ with
+$K>0$ (Proposition~\ref{prop:integral}). Here $W_m(\alpha)$ is a phase that
+grows roughly like $m\alpha$.
+
+The heart of the argument (Sections~\ref{sec:bounds}
+and~\ref{sec:phase}) shows that the two phases $W_{n+1}$ and $W_{n+2}$ of
+consecutive rows differ by an amount strictly between $0$ and $\pi$ on the
+whole range of $\alpha$ we need. It follows that whenever their average
+crosses a multiple of $\pi/2$, the two cosines have a prescribed pair of
+signs. The signs run through a four-term cycle in which the two rows change
+sign alternately. Together with a separate argument for the first two zeros
+near $a_0$ (Section~\ref{sec:micro}) and the signs at $a=\infty$, this
+exhibits $\deg C_n+\deg C_{n+1}$ alternating sign changes. These are all the
+zeros, so they are real, simple and interlacing (Section~\ref{sec:proof}).
+The estimates hold for $n\ge 420$. For $n\le 420$ we verify the theorem by an
+exact computation with integer polynomials (Section~\ref{sec:finite}).
+
+\section{The generating function}\label{sec:gf}
+
+Throughout, $a=1-t$ and $p_n(a)=C_n(1-a)$. Zeros of $C_n$ in $t$ correspond to
+zeros of $p_n$ in $a$ under $t=1-a$, which reverses the order. In particular
+the largest zero of $C_{n+1}$ in $t$ is the smallest zero of $p_{n+1}$ in $a$.
+
+\begin{lemma}\label{lem:gf}
+As formal power series in $x$ with coefficients in $\mathbb Z[a]$,
+\begin{equation}\label{eq:G}
+ G(a,x):=\sum_{n\ge0}p_n(a)x^n=\frac{1-ax^2-\sqrt{D(a,x)}}{2x(1-ax)},\qquad
+ D(a,x)=(1+ax^2)^2-4x,
+\end{equation}
+where $\sqrt{D}$ is the branch with value $1$ at $x=0$. Equivalently,
+$G=1+ax^2G+x(1-ax)G^2$.
+\end{lemma}
+
+\begin{proof}
+Baril, Harris, Harry, McClinton and Ram\'irez~\cite[Theorem~5.1]{BHHMR} give
+the generating function of nonempty Catalan words by length and number of
+$\ell$-peaks. For $\ell=1$ and with $1-y=a$, their formula reads
+$(1-2x+ax^2-\sqrt{D})/(2x(1-ax))$. Adding $1$ for the empty word
+gives~\eqref{eq:G}. The quadratic equation follows because the two roots of
+$x(1-ax)G^2-(1-ax^2)G+1=0$ are $\bigl(1-ax^2\pm\sqrt{(1-ax^2)^2-4x(1-ax)}\bigr)/(2x(1-ax))$
+and $(1-ax^2)^2-4x(1-ax)=D(a,x)$.
+\end{proof}
+
+\begin{lemma}\label{lem:basic}
+For $n\ge1$ and $0\le i\le\lfloor(n-1)/2\rfloor$,
+\begin{equation}\label{eq:coef}
+ [X^i]\,C_n(1+X)=\frac{(2n-3i)!}{i!\,(n-2i-1)!\,(n-2i)!\,(n-i)\,(n-i+1)},
+\end{equation}
+and these are all the nonzero coefficients. Consequently $C_n$ has degree
+$\lfloor(n-1)/2\rfloor$ and positive leading coefficient, all its
+coefficients in $t$ are nonnegative, and $C_n(0)>0$.
+\end{lemma}
+
+\begin{proof}
+Put $X=t-1=-a$ and $U=G-1$. The quadratic equation of Lemma~\ref{lem:gf}
+becomes $U=x(1+U)\bigl(1+(1+Xx)U\bigr)$. Consider the bivariate series
+$V(x,s)$ defined by $V=x(1+V)(1+(1+s)V)$, so that $U(x)=V(x,Xx)$. By Lagrange
+inversion, for $k\ge1$,
+\[
+ [x^k]V=\frac1k[V^{k-1}](1+V)^k(1+(1+s)V)^k
+ =\frac1k\sum_{j}\binom{k}{k-1-j}\binom kj(1+s)^j .
+\]
+Using $\binom kj\binom ji=\binom ki\binom{k-i}{j-i}$ and Vandermonde's identity,
+$[x^ks^i]V=\frac1k\binom ki\binom{2k-i}{k-1-i}$. Since $[x^nX^i]U=[x^{n-i}s^i]V$,
+taking $k=n-i$ gives~\eqref{eq:coef} after simplification. The coefficient
+vanishes unless $n-2i-1\ge0$. The top coefficient in $X$ equals the top
+coefficient in $t$, so it is positive. Coefficients in $t$ are counts, and
+$C_n(0)>0$ because the word $00\cdots0$ has no peak.
+\end{proof}
+
+For $n\ge1$, the polynomial $p_n(a)$ has degree $\lfloor(n-1)/2\rfloor$ in $a$
+and leading coefficient of sign $(-1)^{\deg p_n}$. Hence
+\begin{equation}\label{eq:infty}
+ \sgn p_n(a)=(-1)^{\lfloor(n-1)/2\rfloor}\quad\text{for all sufficiently large } a.
+\end{equation}
+
+\section{A parametrization of the branch points}\label{sec:param}
+
+Let $a_0=27/16$. At $a=a_0$ the discriminant has a double root:
+\begin{equation}\label{eq:Dcrit}
+ D(a_0,x)=\Bigl(1-\frac{9x}{4}\Bigr)^2\Bigl(1+\frac x2+\frac{9x^2}{16}\Bigr),
+\end{equation}
+as one checks by expanding. The roots of the second factor have modulus $4/3$.
+
+For $0<\alpha<\pi/2$ put
+\[
+ c=\cos\alpha,\quad R=1+2c,\quad b=\frac{2(1+c)c^2}{R^2},\quad
+ a=\frac{1}{Rb^2}=\frac{R^3}{4(1+c)^2c^4},\quad u=ab=\frac{R}{2(1+c)c^2},
+\]
+and
+\[
+ q=e^{i\alpha},\qquad \eta=-c+i\sqrt{R^2-c^2}.
+\]
+Write $\theta=\arg\eta$. Then $|\eta|=R$ and $\cos\theta=-c/R$, so
+$\pi/2<\theta<\pi$. Since $-c/R>-c$, we have $\theta<\pi-\alpha$, so
+$\alpha+\theta<\pi$. We write $a=a(\alpha)$ when the dependence matters.
+
+\begin{lemma}\label{lem:param}
+\begin{enumerate}
+\item The map $\alpha\mapsto a(\alpha)$ is a strictly increasing bijection
+from $(0,\pi/2)$ onto $(a_0,\infty)$. Moreover $a(\alpha)-a_0\ge a_0(1-\cos\alpha)$.
+\item For $a=a(\alpha)$ and all $z\in\mathbb C$,
+\[
+ D(a,bz)=\prod_{h\in\{q,\bar q,\eta,\bar\eta\}}\Bigl(1-\frac zh\Bigr).
+\]
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(1) We have $\log a=3\log R-2\log(1+c)-4\log c-\log 4$, so
+\[
+ -\frac{d\log a}{dc}=\frac4c+\frac2{1+c}-\frac6R
+ =\frac1c+\frac2{1+c}+\frac{3}{c(1+2c)}>\frac1c\ge1 .
+\]
+Thus $a$ decreases strictly in $c$, that is, increases in $\alpha$. As
+$c\to1$, $a\to 27/16$; as $c\to0$, $a\to\infty$. Integrating
+$-d\log a/dc>1$ from $c$ to $1$ gives $a\ge a_0e^{1-c}\ge a_0(2-c)$.
+
+(2) Both sides are polynomials in $z$ with constant term $1$. Since
+$(1-z/q)(1-z/\bar q)=1-2cz+z^2$ and
+$(1-z/\eta)(1-z/\bar\eta)=1+2cz/R^2+z^2/R^2$, the right side is
+\[
+ 1-\frac{2c(R^2-1)}{R^2}z+\frac{R^2+1-4c^2}{R^2}z^2+\frac{z^4}{R^2}
+ =1-\frac{8(1+c)c^2}{R^2}z+\frac{2}{R}z^2+\frac{z^4}{R^2},
+\]
+using $R^2-1=4c(1+c)$ and $R^2+1-4c^2=2R$. The left side is
+$1-4bz+2ab^2z^2+a^2b^4z^4$, and $ab^2=1/R$.
+\end{proof}
+
+
+Thus, for $a=a(\alpha)$, the branch points of $x\mapsto G(a,x)$ are
+$bq,b\bar q,b\eta,b\bar\eta$. The factor $1-ax$ in the denominator
+of~\eqref{eq:G} vanishes at $x=1/a$, that is, at $z=x/b=1/u$, a positive real
+number. As $\alpha\to0$ the points $q$ and $\bar q$ merge at $z=1$, which is
+the double root $x=b(0)=4/9$ in~\eqref{eq:Dcrit}.
+
+\section{The first two zeros}\label{sec:micro}
+
+Let $h=3/4$, $\rho=4/9$ and $\kappa=16\sqrt3/27$. Note that $\rho a_0=h$.
+
+\begin{lemma}\label{lem:micro}
+For every $j\ge420$ and every real $v$ with $0\le v\le h^j$,
+\[
+ \Bigl|\,a_0^{-j}p_j(a_0+v)-\frac{11}{16}+\kappa\,\frac{v}{h^j}\,\Bigr|<10^{-3}.
+\]
+\end{lemma}
+
+\begin{proof}
+By Taylor's theorem in $a$,
+$p_j(a_0+v)=p_j(a_0)+v\,p_j'(a_0)+\sum_{k\ge2}v^k[v^k]p_j(a_0+v)$, and we
+treat the three parts separately.
+
+\emph{Constant term.} By~\eqref{eq:Dcrit},
+$\sqrt{D(a_0,x)}=(1-9x/4)\sqrt{1+x/2+9x^2/16}$ with the branch of the second
+root that equals $1$ at $0$; it is analytic on $|x|<4/3$. Hence
+$G(a_0,\cdot)$ is meromorphic on $|x|<4/3$, and its only pole there is
+$x_0=1/a_0=16/27$. At $x_0$ we have $a_0x_0^2=16/27$ and
+$\sqrt{D(a_0,x_0)}=(-1/3)(11/9)=-11/27$, so the numerator of~\eqref{eq:G}
+equals $22/27$ and the principal part of $G(a_0,\cdot)$ at $x_0$ is
+$\frac{11}{16}(1-a_0x)^{-1}$. Let $E_1=G(a_0,\cdot)-\frac{11}{16}(1-a_0x)^{-1}$,
+which is analytic on $|x|\le0.8$. Write $t(r)=r/2+9r^2/16$, so that $|1+x/2+9x^2/16|$ lies in
+$[1-t(r),1+t(r)]$ on $|x|=r$. On $|x|=0.8$ we have $|1-a_0x|\ge0.35$ and
+$|\sqrt{D}|\le(1+0.8/\rho)\sqrt{1+t(0.8)}<3.8$, so
+$|G|\le(1+0.64a_0+3.8)/(1.6\cdot0.35)<13$ and $|E_1|<13+\frac{11}{16}/0.35<16$.
+By Cauchy's estimate, $|p_j(a_0)-\frac{11}{16}a_0^j|\le16\cdot0.8^{-j}$.
+
+\emph{Linear term.} Differentiating~\eqref{eq:G} in $a$ gives
+\[
+ G_a=\frac{-x^2-x^2(1+ax^2)/\sqrt D}{2x(1-ax)}+\frac{x\,G}{1-ax}.
+\]
+At $a=a_0$ the factor $1/\sqrt{D}$ has a simple pole at $x=\rho$ and no other
+singularity in $|x|<4/3$. Using $a_0\rho^2=1/3$, $\sqrt{1+\rho/2+9\rho^2/16}=2/\sqrt3$
+and $1-a_0\rho=1/4$, the principal part of $G_a(a_0,\cdot)$ at $\rho$ is
+$-\kappa(1-x/\rho)^{-1}$. Let $E_2=G_a(a_0,\cdot)+\kappa(1-x/\rho)^{-1}$, which
+is analytic on $|x|\le0.52$ because $1/a_0>0.52$. On $|x|=0.52$:
+$|1-a_0x|>0.12$; $0.1<(0.52/\rho-1)\sqrt{1-t(0.52)}\le|\sqrt D|\le(1+0.52/\rho)\sqrt{1+t(0.52)}<3.1$;
+hence $|G|<38$, $|G_a|<250$ and $|E_2|<300$. By Cauchy's estimate,
+$|p_j'(a_0)+\kappa\rho^{-j}|\le300\cdot0.52^{-j}$.
+
+\emph{Higher terms.} Let $|x|\le0.4$ and let $a$ be complex with
+$|a-a_0|\le10^{-3}$. Then $|D(a_0,x)|\ge(1-0.4/\rho)^2(1-t(0.4))=0.0071$
+and $|D(a,x)-D(a_0,x)|=|a-a_0|\,|x|^2|2+(a+a_0)x^2|<0.00042$. So $D$ does not
+vanish on this polydisk, $\sqrt D$ is analytic there, and $G$ is jointly
+analytic with $|G|<20$ on the distinguished boundary (there
+$|D|\le(1+0.17|a|)^2+1.6<3.24$, so the numerator is at most $1+0.17|a|+1.8$,
+and $|2x(1-ax)|\ge0.8\cdot0.32$). Cauchy's estimate in both
+variables gives $|[v^k]p_j(a_0+v)|\le20\cdot0.4^{-j}10^{3k}$. Since
+$10^3h^j<1/2$, the terms with $k\ge2$ contribute at most
+$40\cdot0.4^{-j}(10^3v)^2\le4\cdot10^7\,0.4^{-j}h^{2j}$.
+
+Dividing by $a_0^j$ and using $v\le h^j$ and $\rho^{-j}a_0^{-j}=h^{-j}$, the
+quantity in the lemma is at most
+\[
+ 16(0.8a_0)^{-j}+300\Bigl(\frac{\rho}{0.52}\Bigr)^{j}+4\cdot10^7\Bigl(\frac{h^2}{0.4a_0}\Bigr)^{j}.
+\]
+All three bases are below $1$, and the sum is below $10^{-3}$ at $j=420$.
+\end{proof}
+
+\begin{corollary}\label{cor:micro}
+Let $n\ge420$ and $s=0.58\,h^n$. Then $p_n(a_0)>0$, $p_{n+1}(a_0)>0$,
+$p_n(a_0+s)>0$ and $p_{n+1}(a_0+s)<0$. Moreover $a_0+s<a(3/(n+1))$.
+\end{corollary}
+
+\begin{proof}
+At $v=0$ both normalized values exceed $11/16-10^{-3}$. At $v=s$,
+$v/h^n=0.58$ and $v/h^{n+1}=0.58/0.75\le1$, and
+$\frac{11}{16}-0.58\kappa>10^{-3}$ while $\frac{11}{16}-\frac{0.58}{0.75}\kappa<-10^{-3}$.
+For the last claim, Lemma~\ref{lem:param}(1) and $1-\cos x\ge x^2/3$ for
+$0\le x\le1$ give $a(3/(n+1))-a_0\ge3a_0/(n+1)^2$, and
+$0.58h^n(n+1)^2<3a_0$ for $n\ge420$ (the left side decreases in $n$).
+\end{proof}
+
+\section{An exact integral formula}\label{sec:integral}
+
+Fix $\alpha\in(0,\pi/2)$ and the quantities of Section~\ref{sec:param}, and
+let $\mathcal H=\{q,\bar q,\eta,\bar\eta\}$. Square roots are principal
+throughout. For $d\in\mathcal H$ and $h\in\mathcal H\setminus\{d\}$ the ratio
+$d/h$ is not real: its argument is one of $\pm2\alpha$, $\pm2\theta$,
+$\pm(\theta-\alpha)$, $\pm(\theta+\alpha)$, and none of these is a multiple of
+$\pi$ because $0<\alpha<\pi/2<\theta<\pi-\alpha$. Hence also $d/(h-d)$ is not
+real. For $d\in\{q,\eta\}$ and $y\ge0$ define
+\[
+ Z_d=\frac{\prod_{h\ne d}\sqrt{1-d/h}}{1-ud},\qquad
+ L_d(y)=\frac{1-ud}{1-ud(1+y)}\prod_{h\ne d}\sqrt{1-\frac{y\,d}{h-d}},
+\]
+with $h$ ranging over $\mathcal H\setminus\{d\}$. These are well defined and
+continuous: $1-d/h$ and $1-yd/(h-d)$ are never real and negative, and
+$1-ud(1+y)\ne0$ because $d$ is not real.
+
+For $m\ge2$ let $\beta_m=B(\tfrac32,m-\tfrac12)$ and let $\E_m$ denote expectation
+with respect to the probability density $y^{1/2}(1+y)^{-m-1}/\beta_m$ on
+$(0,\infty)$. Its moments are
+\begin{equation}\label{eq:moments}
+ \E_m y^j=\prod_{i=1}^{j}\frac{2i+1}{2m-1-2i}\qquad(0\le j<m-\tfrac12).
+\end{equation}
+Finally put
+\[
+ S_m=\E_mL_q+\Bigl(\frac q\eta\Bigr)^{m}\frac{Z_\eta}{Z_q}\,\E_mL_\eta .
+\]
+
+\begin{proposition}\label{prop:integral}
+For $n\ge1$, $m=n+1$, $\alpha\in(0,\pi/2)$ and $a=a(\alpha)$,
+\[
+ p_n(a)=\frac{\beta_m}{\pi b^m}\,\Re\bigl(q^{-m}Z_qS_m\bigr).
+\]
+\end{proposition}
+
+\begin{proof}
+Let $F(z)=G(a,bz)$, so $p_n(a)=b^{-n}[z^n]F$. By Lemma~\ref{lem:param}(2) and
+$ab^2=1/R$,
+\[
+ F(z)=\frac{1-z^2/R-Q(z)}{2bz(1-uz)},\qquad Q(z)=\prod_{h\in\mathcal H}\sqrt{1-z/h}.
+\]
+The principal root $\sqrt{1-z/h}$ is analytic off the ray
+$\{h(1+y):y\ge0\}$. Let $\Omega$ be the plane minus the four rays; these are
+disjoint, and $\Omega$ is star-shaped about $0$. On $\Omega$, $Q$ is analytic
+with $Q(0)=1$ and $Q^2=D(a,bz)$, so it is the branch in~\eqref{eq:G}. The
+point $z=1/u$ lies on the positive axis, where the factors of $Q$ come in
+conjugate pairs, so $Q(1/u)>0$. As $Q(1/u)^2=D(a,1/a)=(1-1/a)^2$ and
+$Ru^2=a$, the numerator of $F$ at $1/u$ equals
+$1-1/a-(1-1/a)=0$. Hence $F$ is analytic on $\Omega$, bounded near each
+branch point and bounded at infinity.
+
+Write $[z^n]F=\frac1{2\pi i}\oint F(z)z^{-n-1}\,dz$ over a small circle, and
+deform the contour to a large circle together with, for each $d\in\mathcal H$,
+a hairpin that runs in along the clockwise side of the ray of $d$ and back out
+along its counterclockwise side. The large circle contributes $O(r^{-n})$,
+which tends to $0$, and the small arcs around the branch points vanish. On the
+ray, $z=d(1+y)$ and $1-z/d=-y$; the boundary values of $\sqrt{1-z/d}$ are
+$-i\sqrt y$ on the counterclockwise side and $+i\sqrt y$ on the clockwise side.
+For $h\ne d$, both $\sqrt{1-z/h}$ and $\sqrt{1-d/h}\,\sqrt{1-yd/(h-d)}$ are
+continuous nonvanishing square roots of the same function of $y\ge0$ and agree
+at $y=0$, so they are equal; similarly
+$(1-uz)^{-1}=(1-ud)^{-1}(1-ud)/(1-ud(1+y))$. Hence the jump of $F$ across the
+ray, counterclockwise side minus clockwise side, is
+\[
+ \frac{2i\sqrt y\,\prod_{h\ne d}\sqrt{1-z/h}}{2bz(1-uz)}=\frac{i\sqrt y}{bz}\,Z_dL_d(y),
+\]
+and the hairpin contributes
+\[
+ \frac1{2\pi i}\int_0^\infty\frac{i\sqrt y}{b\,d(1+y)}Z_dL_d(y)\,\bigl(d(1+y)\bigr)^{-n-1}d\,dy
+ =\frac{\beta_m}{2\pi b}\,d^{-m}Z_d\,\E_mL_d .
+\]
+The contributions of $\bar d$ and $d$ are complex conjugates. Summing over
+$\mathcal H$ and multiplying by $b^{-n}$ gives the formula.
+\end{proof}
+
+\section{Bounds for the correction factor}\label{sec:bounds}
+
+Throughout this section $m\ge421$. Let
+\[
+ \alpha_*=\arccos(2/m),
+\]
+so that $3/m<1/4<3/2<\alpha_*<\pi/2$. We bound $S_j$ for $j\in\{m,m+1\}$ on
+$[3/m,\alpha_*]$, in three ranges of $\alpha$. We use three elementary facts.
+
+\begin{lemma}\label{lem:elem}
+\begin{enumerate}
+\item For $w\in\mathbb C\setminus(-\infty,-1]$, $|\sqrt{1+w}-1|\le|w|$, and
+$|\sqrt{1+w}-1|\le|w|/2$ if $\Re w\ge0$.
+\item If $u>0$, $d\notin\mathbb R$ and $y\ge0$, then
+$\Bigl|\dfrac{1-ud}{1-ud(1+y)}-1\Bigr|\le\dfrac{y}{|\sin\arg d|}$.
+\item $\bigl|\prod_i(1+e_i)-1\bigr|\le\prod_i(1+|e_i|)-1$ for complex $e_i$.
+\end{enumerate}
+Consequently, if $|d/(h-d)|\le A_h$ for $h\ne d$ and
+$|(1-ud)/(1-ud(1+y))-1|\le A_0y$, then
+$|L_d(y)-1|\le(1+A_0y)\prod_{h\ne d}(1+A_hy)-1$.
+\end{lemma}
+
+\begin{proof}
+(1) $\sqrt{1+w}-1=w/(\sqrt{1+w}+1)$, and $\Re\sqrt{1+w}\ge0$; if
+$\Re w\ge0$ then $(\Re\sqrt{1+w})^2\ge\Re(1+w)\ge1$. (2) The difference equals
+$udy/(1-ud(1+y))$, and $|1-w|\ge|\Im w|=|w|\,|\sin\arg d|$ for $w=ud(1+y)$.
+(3) Expand the product.
+\end{proof}
+
+\begin{lemma}\label{lem:moments}
+Let $P_m(y)=\sum_{j,k}c_{jk}m^ky^j$ with $c_{jk}\ge0$, $c_{jk}=0$ unless
+$k\le j\le6$. Then $\E_{m'}P_m\le\E_mP_m$ for $m'\ge m\ge8$, and
+$m\mapsto\E_mP_m$ is nonincreasing. The same holds for
+$\frac m3\E_m\bigl[(\frac3{2m-1}+y)P_m(y)\bigr]$.
+\end{lemma}
+
+\begin{proof}
+By~\eqref{eq:moments} the moments decrease in $m$, and
+$m^k\E_my^j=\prod_{i\le k}\frac{(2i+1)m}{2m-1-2i}\prod_{k<i\le j}\frac{2i+1}{2m-1-2i}$
+is a product of positive factors that decrease in $m$. In the second
+expression each term is $\frac{m}{2m-1}\,m^k\E_my^j$ or $\frac13m^{k+1}\E_my^{j+1}$
+with $k+1\le j+1$.
+\end{proof}
+
+\begin{lemma}\label{lem:amp}
+$\displaystyle\Bigl|\frac{Z_\eta}{Z_q}\Bigr|=R\sqrt{\frac{\sin\theta}{\sin\alpha}}\,
+\frac{|1-uq|}{|1-u\eta|}\le\frac{2R}{\sqrt{\sin\alpha}}$.
+\end{lemma}
+
+\begin{proof}
+We have $|1-d/h|=|h-d|/|h|$. In the ratio of the squared radical products the
+mixed distances $|\eta-q|,|\eta-\bar q|$ cancel, leaving
+$\bigl(|\eta-\bar\eta|/R\bigr)/\bigl(|q-\bar q|/R^2\bigr)=R^2\sin\theta/\sin\alpha$.
+For the pole factors, $|1-uq|\le1+u$ and
+$|1-u\eta|^2=1+2uc+u^2R^2\ge\max(1,uR)^2$, and
+$(1+u)/\max(1,uR)\le2$ because $R>1$.
+\end{proof}
+
+\begin{proposition}[middle range]\label{prop:middle}
+For $1/4\le\alpha\le3/2$ and every $j\ge421$, $|S_j-1|<0.094$.
+\end{proposition}
+
+\begin{proof}
+Here $R\ge1+2\cos\frac32>1.14$ and $\sin\alpha\ge\sin\frac14>0.247$. For $d=q$:
+$|q/(\bar q-q)|=1/(2\sin\alpha)<3$; $|q/(h-q)|\le1/(R-1)<8$ for
+$h\in\{\eta,\bar\eta\}$ since $|h|=R$; and the pole constant is
+$1/\sin\alpha<5$. By Lemma~\ref{lem:elem},
+$|\E_jL_q-1|\le\E_j[(1+3y)(1+8y)^2(1+5y)]-1<0.093$, the last value computed
+from~\eqref{eq:moments} at $j=421$ (Lemma~\ref{lem:moments}). For $d=\eta$:
+$\sin\theta=\sqrt{1-c^2/R^2}\ge\sqrt8/3$ since $c/R\le1/3$, so the constants
+are $1/(2\sin\theta)<1$, $R/(R-1)<10$ (twice) and $1/\sin\theta<2$, and
+$|\E_jL_\eta|\le\E_j(1+10y)^4<2$. By Lemma~\ref{lem:amp}, $|Z_\eta/Z_q|<6/\sqrt{0.247}<13$,
+and $|q/\eta|^j=R^{-j}<1.14^{-421}$. So the second term of $S_j$ is below
+$10^{-20}$.
+\end{proof}
+
+\begin{proposition}[large angles]\label{prop:large}
+For $3/2\le\alpha\le\alpha_*$ and $j\in\{m,m+1\}$, $|S_j-1|<0.57$.
+\end{proposition}
+
+\begin{proof}
+Here $2/m\le c\le\cos\frac32<0.071$, so $R<1.15$, $\sin\alpha>0.997$,
+$\Im\eta=\sqrt{1+4c+3c^2}\ge1$ and $\sin\theta=\Im\eta/R>0.86$. For $d=q$: the
+constants for $\bar q$, $\bar\eta$ and the pole are $1/(2\sin\alpha)$,
+$1/|\bar\eta-q|\le1/1.99$ and $1/\sin\alpha$, all at most $2$; for $\eta$,
+$|\eta-q|\ge|\Re\eta-\Re q|=2c$ gives the constant $1/(2c)\le m/4$. For
+$d=\eta$ the constants are $1/(2\sin\theta)$, $R/|\bar q-\eta|\le1.15/1.99$,
+$1/\sin\theta$, all at most $2$, and $R/(2c)\le0.288m$. Hence for both,
+\[
+ |\E_jL_d-1|\le\E_j\bigl[(1+2y)^3(1+0.288\,my)\bigr]-1<0.48,
+\]
+evaluated at $j=m=421$ by Lemma~\ref{lem:moments}. By Lemma~\ref{lem:amp},
+$|Z_\eta/Z_q|<2.31$. Since $\log(1+x)\ge x/(1+x/2)$ and $c\ge2/m$,
+$j\log R\ge m\log(1+4/m)\ge4m/(m+2)>3.98$, so $R^{-j}<0.019$. Thus
+$|S_j-1|<0.48+0.019\cdot2.31\cdot1.48<0.57$.
+\end{proof}
+
+\begin{proposition}[small angles]\label{prop:small}
+For $3/m\le\alpha\le1/4$, $|S_j-1|<0.176$ for $j\in\{m,m+1\}$, and
+$|S_{m+1}-S_m|<0.238\,\alpha$.
+\end{proposition}
+
+\begin{proof}
+Here $c\ge1-\frac1{32}=\frac{31}{32}$, $\sin\alpha\ge\alpha(1-\alpha^2/6)>\frac{25}{26}\alpha\ge\frac{75}{26m}$,
+$R\ge\frac{47}{16}$, and $u=R/(2(1+c)c^2)\le\frac45$ because $u$ decreases in $c$.
+
+\emph{The main factor.} For $d=q$, the ratio for $h=\bar q$ is
+$\sqrt{1+y(1-i\cot\alpha)/2}$, so Lemma~\ref{lem:elem}(1) gives the constant
+$|1-i\cot\alpha|/4=1/(4\sin\alpha)\le13m/150$. For $h\in\{\eta,\bar\eta\}$ the
+constant is $1/(R-1)<1$. For $y\le1/8$, $|1-uq(1+y)|\ge1-\frac45\cdot\frac98=\frac1{10}$,
+so the pole ratio is within $8y$ of $1$. Hence, for $0\le y\le1/8$,
+\[
+ |L_q(y)-1|\le P_m(y):=(1+8y)(1+y)^2\bigl(1+\tfrac{13m}{150}y\bigr)-1 .
+\]
+For $y>1/8$ we use the pole constant $1/\sin\alpha<2m$ instead, which gives
+$|L_q(y)-1|<(1+2m)^2(1+y)^4$. With $(1+y)^{-(j-20)}\le(8/9)^{j-20}$ for
+$y\ge1/8$, $\int_0^\infty y^{1/2}(1+y)^{-17}dy<1$, and
+$\beta_j\ge\int_0^{1/j}y^{1/2}(1+y)^{-j-1}dy\ge1/(6j^{3/2})$, the part of
+$\E_j|L_q-1|$ from $y>1/8$ is at most
+$\tau_m:=6(m+1)^{3/2}(1+2m)^2(8/9)^{m-20}$.
+
+Let $I_j=\E_jL_q$. Then $|I_j-1|\le\E_jP_m+\tau_m\le\E_mP_m+\tau_m<0.175+10^{-7}$
+by Lemma~\ref{lem:moments}. For the difference, the densities satisfy
+$d\E_{m+1}/d\E_m=1+D_m$ with $D_m(y)=\bigl(\frac3{2m-1}-y\bigr)/(1+y)$, and
+$\E_mD_m=0$. Hence
+\[
+ |I_{m+1}-I_m|=|\E_m[D_m(L_q-1)]|\le\E_m\Bigl[\Bigl(\frac3{2m-1}+y\Bigr)P_m\Bigr]+\tau_m
+ <\frac3m\,0.237+\tau_m,
+\]
+using $|D_m|\le1$ for the tail and Lemma~\ref{lem:moments} at $m=421$.
+
+\emph{The secondary factor.} For $d=\eta$, $\sin\theta\ge\sqrt8/3$ and
+$R/(R-1)\le47/31$, so all four constants are at most $2$ and
+$|\E_jL_\eta|\le\E_j(1+2y)^4<2$. By Lemma~\ref{lem:amp},
+$|Z_\eta/Z_q|\le6\sqrt{26m/75}<4m$. So the second term of $S_j$ is at most
+$8m(16/47)^m$.
+
+Combining, $|S_j-1|<0.175+10^{-7}+8m(16/47)^m<0.176$ and, as $\alpha\ge3/m$,
+$|S_{m+1}-S_m|<0.237\alpha+\tau_m+16m(16/47)^m<0.238\alpha$, because
+$\frac m3\bigl(\tau_m+16m(16/47)^m\bigr)<10^{-3}$ for $m\ge421$.
+\end{proof}
+
+\section{The phase}\label{sec:phase}
+
+\begin{lemma}\label{lem:argZ}
+For $0<\alpha<\pi/2$ let $H=1+(2cq+q^2)/R^2$. Then $0\le\Arg H<\pi/4$ and
+\[
+ \arg Z_q=\varphi(\alpha):=\frac\alpha2-\frac\pi4+\frac12\Arg H-\Arg(1-uq),
+\]
+where $\Arg$ is the principal argument and $\varphi$ is continuous.
+\end{lemma}
+
+\begin{proof}
+First, $1-q/\bar q=1-e^{2i\alpha}=2\sin\alpha\,e^{i(\alpha-\pi/2)}$, whose
+principal root has argument $\alpha/2-\pi/4$. Next, $(1-q/\eta)(1-q/\bar\eta)=H$.
+Since $|q/\eta|=1/R<1$, both factors have positive real part, so their
+principal roots have arguments in $(-\pi/4,\pi/4)$, and the sum of these
+arguments lies in $(-\pi/2,\pi/2)$. It is congruent to $\frac12\Arg H$ modulo
+$\pi$, so it equals $\frac12\Arg H$ once we know $|\Arg H|<\pi$. In fact
+$\Im H=4c\sin\alpha/R^2>0$ and $\Re H-\Im H=4c(1+2c-\sin\alpha)/R^2>0$, so
+$0<\Arg H<\pi/4$. Finally $\Im(1-uq)<0$, so $\Arg(1-uq)\in(-\pi,0)$ is
+continuous.
+\end{proof}
+
+For $j\ge421$ and $\alpha\in[3/m,\alpha_*]$, Propositions~\ref{prop:middle},
+\ref{prop:large} and~\ref{prop:small} give $|S_j-1|<1$, so $\Arg S_j$ is
+continuous in $\alpha$ ($S_j$ is continuous by dominated convergence).
+Define
+\[
+ W_j(\alpha)=j\alpha-\varphi(\alpha)-\Arg S_j(\alpha).
+\]
+Since $q^{-j}Z_qS_j=|Z_qS_j|e^{-iW_j}$, Proposition~\ref{prop:integral} gives
+\begin{equation}\label{eq:sign}
+ \sgn p_{j-1}(a(\alpha))=\sgn\cos W_j(\alpha).
+\end{equation}
+
+\begin{proposition}\label{prop:gap}
+Let $m\ge421$. For every $\alpha\in[3/m,\alpha_*]$,
+\[
+ 0<W_{m+1}(\alpha)-W_m(\alpha)<\pi .
+\]
+\end{proposition}
+
+\begin{proof}
+The difference is $\alpha-(\Arg S_{m+1}-\Arg S_m)$. If $|S-1|\le r<1$ then
+$|\Arg S|\le\arcsin r$. On $[1/4,3/2]$, this gives a difference within
+$2\arcsin0.094<0.19$ of $\alpha$, hence in $(0.06,1.69)$. On $[3/2,\alpha_*]$
+it is within $2\arcsin0.57<1.22$ of $\alpha$, hence in $(0.28,2.80)$. On
+$[3/m,1/4]$, the segment from $S_m$ to $S_{m+1}$ lies in the disk
+$|S-1|<0.176$, on which the principal logarithm is analytic and
+$|S|>0.824$. Hence $|\Arg S_{m+1}-\Arg S_m|\le|S_{m+1}-S_m|/0.824<0.29\alpha$,
+and the difference lies in $(0.71\alpha,1.29\alpha)$.
+\end{proof}
+
+\begin{lemma}\label{lem:left}
+Let $m\ge421$ and $\alpha=3/m$. Then $\pi<W_m(\alpha)<W_{m+1}(\alpha)<3\pi/2$.
+\end{lemma}
+
+\begin{proof}
+At this angle, $\Re H=1+(4c^2-1)/R^2\ge1$ and $\Im H\le4\alpha/R^2$, so
+$0\le\Arg H\le4\alpha/R^2<0.47\alpha$. Also $\tan(-\Arg(1-uq))=u\sin\alpha/(1-uc)\le\frac45\alpha/\frac15=4\alpha$.
+Hence $-\pi/4\le\varphi\le-\pi/4+4.75\alpha$. With $m\alpha=3$ and
+$|\Arg S_m|<\arcsin0.176<0.177$,
+\[
+ 3+\frac\pi4-\frac{14.25}{m}-0.177<W_m<3+\frac\pi4+0.177,
+\]
+so $3.57<W_m<3.97$. By Proposition~\ref{prop:small},
+$0<W_{m+1}-W_m<1.29\alpha<0.01$.
+\end{proof}
+
+\begin{lemma}\label{lem:right}
+Let $n\ge420$, $m=n+1$, and $B=\frac12(W_m+W_{m+1})$. At $\alpha=\alpha_*$,
+\[
+ B>\begin{cases}(k-1)\pi&\text{if } n=2k,\\ (k-\tfrac12)\pi&\text{if } n=2k+1.\end{cases}
+\]
+\end{lemma}
+
+\begin{proof}
+Write $1-uq=-(uq-1)$. Subtracting $1$ from a point of argument $\alpha$ in the
+upper half-plane increases the argument, so $\arg(uq-1)>\alpha$ and
+$-\Arg(1-uq)=\pi-\arg(uq-1)<\pi-\alpha$. With Lemma~\ref{lem:argZ},
+$\varphi<(\alpha/2-\pi/4)+\pi/8+\pi-\alpha<\pi/8+\pi-\alpha_*$. Since
+$\alpha_*=\pi/2-\arcsin(2/m)$ and $\arcsin(2/m)<0.005$, $\varphi<1.97$. By
+Proposition~\ref{prop:large}, $|\Arg S_j|<\arcsin0.57<0.61$. Also
+$(m+\frac12)\arcsin(2/m)<2.01$. Hence
+\[
+ B=(m+\tfrac12)\alpha_*-\varphi-\tfrac12(\Arg S_m+\Arg S_{m+1})
+ >(m+\tfrac12)\tfrac\pi2-2.01-1.97-0.61 .
+\]
+For $n=2k$, $m=2k+1$ and the right side is $k\pi+\frac{3\pi}4-4.59>(k-1)\pi$.
+For $n=2k+1$, $m=2k+2$ and it is $k\pi+\frac{5\pi}4-4.59>(k-\frac12)\pi$.
+\end{proof}
+
+\section{Proof of Theorem~\ref{thm:main} for \texorpdfstring{$n\ge420$}{n >= 420}}\label{sec:proof}
+
+Let $n\ge420$, $m=n+1$, and write $f=p_n$ (the older row) and $g=p_{n+1}$
+(the newer row). Let $d_f=\deg f$ and $d_g=\deg g$. If $n=2k$ then
+$(d_f,d_g)=(k-1,k)$; if $n=2k+1$ then $(d_f,d_g)=(k,k)$. We record signs as
+pairs $(\sgn f,\sgn g)$.
+
+\emph{Near $a_0$.} By Corollary~\ref{cor:micro}, the pair is $(+,+)$ at $a_0$
+and $(+,-)$ at $a_0+s$, and $a_0+s<a(3/m)$.
+
+\emph{At $\alpha=3/m$.} By Lemma~\ref{lem:left} and~\eqref{eq:sign}, the pair
+is $(-,-)$.
+
+\emph{Level crossings.} Let $B(\alpha)=\frac12(W_m+W_{m+1})$, which is
+continuous on $[3/m,\alpha_*]$, and let $\Lambda=2k-2$ if $n=2k$ and
+$\Lambda=2k-1$ if $n=2k+1$. By Lemmas~\ref{lem:left} and~\ref{lem:right},
+$B(3/m)<3\pi/2$ and $B(\alpha_*)>\Lambda\pi/2$. Define
+$\alpha_2=3/m$ and, for $\ell=3,\dots,\Lambda$, let $\alpha_\ell$ be the
+least $\alpha>\alpha_{\ell-1}$ in $[3/m,\alpha_*]$ with $B(\alpha)=\ell\pi/2$.
+These exist by the intermediate value theorem, and
+$\alpha_2<\alpha_3<\dots<\alpha_\Lambda$. At $\alpha_\ell$ we have
+$W_m=\ell\pi/2-\delta$ and $W_{m+1}=\ell\pi/2+\delta$ with
+$0<\delta<\pi/2$ by Proposition~\ref{prop:gap}. By~\eqref{eq:sign} the pair
+at $a(\alpha_\ell)$ is
+\[
+ (-,+),\ (+,+),\ (+,-),\ (-,-)\qquad\text{for }\ell\equiv3,0,1,2\pmod 4 .
+\]
+
+\emph{At infinity.} By~\eqref{eq:infty} the pair is
+$((-1)^{d_f},(-1)^{d_g})$ for large $a$.
+
+Now list the points $a_0<a_0+s<a(\alpha_2)<a(\alpha_3)<\dots<a(\alpha_\Lambda)$
+and a large $a$. Between consecutive points exactly one coordinate of the sign
+pair changes. It is $g$ on $(a_0,a_0+s)$, $f$ on $(a_0+s,a(\alpha_2))$, and
+then $g,f,g,\dots$ alternately on the intervals between level crossings. On
+the last interval, a direct check of the four cases of $\Lambda\bmod4$ shows
+that the change is in $g$ when $n=2k$ and in $f$ when $n=2k+1$. Each change
+forces a zero of that row in the open interval. Counting, $g$ receives
+$1+(k-2)+1=k$ forced zeros and $f$ receives $1+(k-2)=k-1$ when $n=2k$, and
+both receive $k$ when $n=2k+1$. These numbers equal the degrees. Hence each
+row has exactly one zero in each of its intervals and no other zeros. All
+zeros are real, simple and greater than $a_0$, and in increasing $a$ they
+alternate starting with a zero of $g$. Translating back by $t=1-a$, the zeros
+of $C_n$ and $C_{n+1}$ are simple, lie below $1-a_0=-11/16$, strictly
+interlace, and the largest belongs to $C_{n+1}$. This proves
+Theorem~\ref{thm:main} for all pairs $(C_n,C_{n+1})$ with $n\ge420$.
+\qed
+
+\section{Small \texorpdfstring{$n$}{n}}\label{sec:finite}
+
+For $n\le420$ we verify the theorem by exact computation. The test is the
+classical Sturm-sequence criterion, which we state and prove in the form used.
+
+\begin{lemma}\label{lem:sturm}
+Let $f,g\in\mathbb R[x]$ with positive leading coefficients, $\deg f=e\ge1$.
+\begin{enumerate}
+\item Suppose $\deg g=e-1$. Put $f_0=f$, $f_1=g$, and for $i\ge1$ let
+$f_{i+1}=-\lambda_i\cdot(\text{remainder of }f_{i-1}\text{ modulo }f_i)$ with
+some $\lambda_i>0$. If $\deg f_i=e-i$ and $f_i$ has positive leading
+coefficient for $0\le i\le e$, then $f$ and $g$ have only simple real zeros
+$y_1<\dots<y_e$ and $x_1<\dots<x_{e-1}$ with
+$y_1<x_1<y_2<\dots<x_{e-1}<y_e$.
+\item Suppose $\deg g=e$ and let $g'$ be a positive multiple of the remainder
+of $g$ modulo $f$. If $(f,g')$ satisfies the hypothesis of (1), then $g$ has
+only simple real zeros $x_1<\dots<x_e$ with $x_1<y_1<x_2<\dots<x_e<y_e$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(1) We show by downward induction on $i$ that $f_i$ has $e-i$ simple real
+zeros, strictly interlaced by those of $f_{i+1}$, with the largest zero
+belonging to $f_i$. For $i=e-1$ this holds because $f_{e-1}$ is linear and
+$f_e$ is a positive constant. Given the claim for $i$, let
+$z_1<\dots<z_k$ be the zeros of $f_i$, $k=e-i$. Then
+$f_{i-1}=Qf_i-\lambda_{i}^{-1}f_{i+1}$, so
+$\sgn f_{i-1}(z_l)=-\sgn f_{i+1}(z_l)=-(-1)^{k-l}$, by the interlacing and the
+positive leading coefficient of $f_{i+1}$. Since $f_{i-1}$ has degree $k+1$
+and positive leading coefficient, it has a zero in $(z_k,\infty)$, in each
+$(z_l,z_{l+1})$ and in $(-\infty,z_1)$. That is $k+1$ zeros, all of them.
+The case $i=0$ is the statement.
+(2) By (1), $g'(y_l)$ has sign $(-1)^{e-l}$, and $g(y_l)$ has the same sign.
+As $g$ has degree $e$ and positive leading coefficient, it has a zero in each
+$(y_l,y_{l+1})$ and one in $(-\infty,y_1)$. That is $e$ zeros.
+\end{proof}
+
+For $1\le n\le420$ we computed $C_n$ and $C_{n+1}$ from~\eqref{eq:coef} as
+integer polynomials in $X=t-1$, made them primitive, and ran the sequence of
+Lemma~\ref{lem:sturm} with $f=C_{n+1}$ and $g=C_n$. Remainders were computed by
+pseudo-division and divided by their content, which multiplies them by
+positive rationals. In every case the hypotheses hold: the degrees drop by
+exactly one and every leading coefficient is positive. (For $n\le2$ the newer
+row has degree at most one and the conditions are immediate.) A shift of the
+variable does not affect interlacing, so $C_n$ and $C_{n+1}$ have only simple
+real zeros and interlace as stated, with the largest zero in $C_{n+1}$. The
+zeros are negative because the coefficients of $C_n$ are nonnegative and
+$C_n(0)>0$ (Lemma~\ref{lem:basic}). Together with Section~\ref{sec:proof} this
+proves Theorem~\ref{thm:main}. \qed
+
+\section*{Verification code}
+
+The repository \url{https://github.com/brandonlign/catalan-peaks} contains
+Python programs that reproduce every computation in this paper in exact
+integer and rational arithmetic.
+\begin{itemize}
+\item \texttt{check\_rows.py} compares~\eqref{eq:coef} with a direct count of
+Catalan words for $n\le12$ and with the power series of~\eqref{eq:G} for
+$n\le60$.
+\item \texttt{finite\_interlacing.py} runs the test of Section~\ref{sec:finite}
+for $1\le n\le420$. With the GMP-based \texttt{gmpy2} integers it
+runs in about twenty minutes.
+\item \texttt{constants.py} checks, with rational arithmetic and rational
+bounds for $\pi$, $\sqrt3$ and the trigonometric values involved, every
+numerical inequality used in Sections~\ref{sec:micro}--\ref{sec:phase}.
+\end{itemize}
+An optional script, \texttt{numerics.py}, which uses \texttt{mpmath}, evaluates
+both sides of Proposition~\ref{prop:integral} at sample points and tabulates
+$|S_j-1|$ and $W_{m+1}-W_m$.
+
+\section*{Acknowledgments}
+Claude (Anthropic) helped with the proofs, the verification code, and the
+manuscript.
+
+\begin{thebibliography}{9}
+
+\bibitem{Ale}
+P.~Alexandersson, \emph{Open problems on real-rootedness}, The symmetric
+functions catalog, \url{https://www.symmetricfunctions.com/realRootedOpenProblems.htm},
+section ``Words, parking functions and Catalan words'' (accessed 23 November 2026).
+
+\bibitem{BHHMR}
+J.-L.~Baril, P.~E.~Harris, K.~J.~Harry, M.~McClinton and J.~L.~Ram\'irez,
+\emph{Enumerating runs, valleys, and peaks in Catalan words}, Art Discrete Appl.
+Math. \textbf{8} (2025), no.~2, P2.07;
+\href{https://arxiv.org/abs/2404.05672}{arXiv:2404.05672}. Theorem numbers
+refer to the arXiv version.
+
+\bibitem{OEIS}
+OEIS Foundation Inc., \emph{The On-Line Encyclopedia of Integer Sequences},
+sequence A116424, \url{https://oeis.org/A116424}.
+
+\end{thebibliography}
+
+\end{document}

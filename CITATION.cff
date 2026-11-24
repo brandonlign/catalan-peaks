@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "Please cite the paper when using the result or verification code."
+title: "Short peaks in Catalan words: real zeros and interlacing"
+type: software
+authors:
+  - family-names: Li
+    given-names: Brandon
+    email: brandon.li.gn@gmail.com
+    affiliation: "Great Neck, New York, USA"
+repository-code: "https://github.com/brandonlign/catalan-peaks"
+license: MIT
+keywords:
+  - Catalan words
+  - peaks
+  - real-rooted polynomial
+  - interlacing
+  - Dyck paths
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Li
+      given-names: Brandon
+  title: "Short peaks in Catalan words: real zeros and interlacing"
+  year: 2026

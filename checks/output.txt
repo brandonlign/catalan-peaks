@@ -1,0 +1,32 @@
+== Lemma 2.2: closed formula for the rows
+C_1(t) coefficients: [1]
+C_2(t) coefficients: [2]
+C_3(t) coefficients: [4, 1]
+C_4(t) coefficients: [9, 5]
+C_5(t) coefficients: [22, 19, 1]
+C_6(t) coefficients: [57, 66, 9]
+C_7(t) coefficients: [154, 221, 53, 1]
+C_8(t) coefficients: [429, 729, 258, 14]
+closed formula = direct count of Catalan words for 1 <= n <= 12: ok
+closed formula = generating function for 0 <= n <= 60: ok
+
+== Sections 4-7: numerical inequalities, in exact arithmetic
+Section 4 (first two zeros): ok
+Proposition 6.4 (middle range): ok
+Proposition 6.5 (large angles): ok
+Proposition 6.6 (small angles): ok
+Section 7 (phase): ok
+all constants ok (94 inequalities)
+
+== Section 9: interlacing of C_n and C_(n+1) for 1 <= n <= 420
+pairs 1..50: ok
+pairs 1..100: ok
+pairs 1..150: ok
+pairs 1..200: ok
+pairs 1..250: ok
+pairs 1..300: ok
+pairs 1..350: ok
+pairs 1..400: ok
+C_n and C_(n+1) interlace strictly for all 1 <= n <= 420
+
+all checks passed
