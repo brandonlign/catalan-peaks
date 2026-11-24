@@ -42,6 +42,9 @@ This needs Python 3 (exact integer and rational arithmetic). It runs:
 - `finite_interlacing.py`: the Sturm-sequence test of Section 9 for every pair
   $(C_n,C_{n+1})$ with $1\le n\le420$.
 
+`rows.py` (the rows $C_n$ and the closed formula of Lemma 2.2) and
+`polyarith.py` (exact polynomial arithmetic) are shared helpers.
+
 The last step uses large integer gcds. With
 [gmpy2](https://pypi.org/project/gmpy2/) installed it takes about twenty minutes; set
 `PYTHON` to that interpreter, for example
