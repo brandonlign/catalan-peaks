@@ -90,8 +90,8 @@ following strict form.
 
 \begin{theorem}\label{thm:main}
 For every $n\ge0$ the polynomial $C_n(t)$ has only simple, negative real zeros.
-For every $n\ge1$ the zeros of $C_n$ and $C_{n+1}$ strictly interlace, and the
-largest zero among them belongs to $C_{n+1}$. Explicitly, if $C_n$ has zeros
+For every $n\ge1$ the zeros of $C_n$ and $C_{n+1}$ strictly interlace, and for
+$n\ge2$ the largest zero among them belongs to $C_{n+1}$. Explicitly, if $C_n$ has zeros
 $r_1<\dots<r_d$ and $C_{n+1}$ has zeros $s_1<\dots<s_e$, then
 \begin{align*}
  s_1<r_1<s_2<r_2<\dots<r_d<s_{d+1}&\quad\text{if } e=d+1,\\
@@ -834,11 +834,11 @@ common divisor of its coefficients; together, these operations scale each
 remainder by a positive rational number.
 
 In every case the hypotheses hold: the degrees drop by exactly one at each
-step, and every leading coefficient is positive. (For $n\le2$, the
-higher-index polynomial has degree at most one and the conditions are
-immediate.) Shifting the variable does not affect interlacing, so $C_n$ and
-$C_{n+1}$ have only simple real zeros that strictly interlace, with the
-largest zero belonging to $C_{n+1}$. All zeros are negative because the
+step, and every leading coefficient is positive. (For $n=1$ both $C_1=1$ and
+$C_2=2$ are constant and there is nothing to prove; for $n=2$ the polynomial
+$C_3$ is linear and the conditions are immediate.) Shifting the variable does
+not affect interlacing, so $C_n$ and $C_{n+1}$ have only simple real zeros that
+strictly interlace, with the largest zero belonging to $C_{n+1}$ for $n\ge2$. All zeros are negative because the
 coefficients of $C_n$ are nonnegative and $C_n(0)>0$
 (Lemma~\ref{lem:basic}). Together with Section~\ref{sec:proof}, this
 completes the proof of Theorem~\ref{thm:main}. \qed

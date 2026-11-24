@@ -11,8 +11,8 @@ same triangle counts Dyck paths of semilength $n$ by occurrences of $UDUU$
 of the symmetric functions catalog.
 
 **Theorem.** Every $C_n(t)$ has only simple, negative real zeros. For every
-$n\ge1$ the zeros of $C_n$ and $C_{n+1}$ strictly interlace, and the largest
-zero among them belongs to $C_{n+1}$.
+$n\ge1$ the zeros of $C_n$ and $C_{n+1}$ strictly interlace, and for $n\ge2$
+the largest zero among them belongs to $C_{n+1}$.
 
 For $n\ge420$ the proof is analytic. With $a=1-t$, a contour integral around
 the four branch cuts of the generating function writes each row as an explicit
