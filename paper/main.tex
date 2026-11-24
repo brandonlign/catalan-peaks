@@ -32,13 +32,15 @@ A Catalan word is a word $w_1\cdots w_n$ of nonnegative integers with $w_1=0$
 and $w_{i+1}\le w_i+1$. Alexandersson conjectured that the polynomials
 $C_n(t)$ counting Catalan words of length $n$ by their number of peaks are
 real-rooted and that consecutive polynomials interlace. The same polynomials
-count Dyck paths of semilength $n$ by occurrences of $UDUU$. We prove this
-conjecture: every $C_n$ has only simple, negative real zeros, and the zeros
+count Dyck paths of semilength $n$ by occurrences of $UDUU$. Alexandersson verified the conjecture for $n\le 40$. We prove it for
+every $n$: every $C_n$ has only simple, negative real zeros, and the zeros
 of $C_n$ and $C_{n+1}$ strictly interlace. For $n\ge 420$, the proof is
 analytic. A contour integral around four branch cuts expresses each $C_n$ as
 a positive factor times a cosine, and we bound the difference between the
 phases of consecutive polynomials. For $n\le 420$, an exact Sturm-sequence
-computation completes the proof.
+computation completes the proof. We also show that for $n\ge2$ the largest of
+these zeros belongs to $C_{n+1}$. In particular, the coefficient sequence of every $C_n$
+is log-concave.
 \end{abstract}
 \maketitle
 
@@ -864,9 +866,19 @@ An optional script, \texttt{numerics.py}, uses \texttt{mpmath} to evaluate
 both sides of Proposition~\ref{prop:integral} at sample points and to
 tabulate $|S_j-1|$ and $W_{m+1}-W_m$.
 
-\section*{Acknowledgments}
-Claude (Anthropic) helped with the proofs, the verification code, and the
-manuscript.
+\section*{Statements and Declarations}
+
+\paragraph{Use of AI tools.} Claude (Anthropic) helped with the proofs, the verification code, and the
+manuscript. The author takes full responsibility for the content.
+
+\paragraph{Competing interests.} The author has no relevant financial or non-financial
+interests to disclose.
+
+\paragraph{Funding.} No funding was received for this work.
+
+\paragraph{Data availability.} The verification code is provided as Online
+Resource~1 and at \url{https://github.com/brandonlign/catalan-peaks}. No other data
+were used.
 
 \begin{thebibliography}{9}
 
